@@ -1,0 +1,33 @@
+.content__header
+  %h2
+    %a{:href => "/groups"} Groups
+    \&gt; #{@group.name}
+.card.messages{:id => "group_channel_key_#{@group.channel_key}"}
+  .messages__sidebar.c-overflow
+    .messages__user
+      %img{:alt => "", :src => "#{current_user.profile_pic}"}/
+      %div
+        Signed in as
+        %br/
+        = current_user.email
+    .list-group
+      - @users.each do |user|
+        %a.list-group-item.media{:href => ""}
+          .pull-left
+            %img.avatar-img{:alt => "", :src => "#{user.profile_pic}"}/
+          .media-body
+            .list-group__heading= user.full_name
+            %small.list-group__text= user.email
+  .messages__body
+    .action-header
+      .action-header__label
+        %i.zmdi.zmdi-menu.action-header__trigger.visible-xs{"data-mae-action" => "block-open", "data-mae-target" => ".messages__sidebar"}
+        %span.hidden-xs= current_user.full_name
+    #messages.list-group{:style => "min-height: 350px;"}
+      = render "messages", messages: @group.messages
+      .messages__reply
+        = form_for(@message, remote: true) do |f|
+          = f.hidden_field :group_id
+          = f.hidden_field :user_id
+          = f.text_area :content, class: "messages__reply__text", placeholder: "What's on your mind..."
+          = f.button "<i class='zmdi zmdi-check'></i>".html_safe, class: 'btn btn-default btn--icon messages__reply__btn'

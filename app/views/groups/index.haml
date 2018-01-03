@@ -1,0 +1,17 @@
+.content__header
+  %h2 Groups
+.row
+  - @groups.each_slice(8) do |groups|
+    - groups.each_with_index do |g, index|
+      .col-xs-3
+        / Picture List
+        .card.widget-pictures
+          .card__header
+            %h2
+              = g.name
+              %small
+                = g.group_users.count
+                = "User".pluralize(g.group_users.count)
+          .widget-pictures__body
+            %a.col-xs-12{:href => "/groups/#{g.channel_key}/conversation"}
+              %img{:alt => "", :src => "/assets/demo/img/headers/square/#{index+1}.png"}/

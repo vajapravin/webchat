@@ -1,0 +1,73 @@
+<script type="text/javascript">
+  (function() {
+    this.App || (this.App = {});
+
+    App.cable = ActionCable.createConsumer();
+
+  }).call(this);
+
+  App.messages = App.cable.subscriptions.create('ApplicationCable::MessagesChannel', {
+    received: function(data) {
+      initialize_functions();
+      if(data['message']){
+        content = data.message.content;
+        channel_key = data.message.channel_key;
+        profile_pic = data.message.profile_pic;
+        sent_at = data.message.sent_at;
+        sender_id = data.message.sender.id;
+        full_name = data.message.sender.full_name;
+        email = data.message.sender.email;
+
+        user_id = <%= current_user.id %>;
+
+        if(sender_id == user_id){
+          dom_element = '<div class="list-group-item media child_odd">';
+          dom_element += '<div class="pull-right"><img class="avatar-img" src="'+profile_pic+'" onclick="profile(\''+full_name+'\', \''+email+'\')"></div>';
+          dom_element += '<div class="media-body"><div><div class="messages__item">'+content+'</div></div>';
+          dom_element += '<small class="messages__date"><i class="zmdi zmdi-time"></i> '+sent_at+'</small></div></div>';
+        } else {
+          dom_element = '<div class="list-group-item media child_even">';
+          dom_element += '<div class="pull-left"><img class="avatar-img" src="'+profile_pic+'" alt=""></div>';
+          dom_element += '<div class="media-body"><div><div class="messages__item">'+content+'</div></div>';
+          dom_element += '<small class="messages__date"><i class="zmdi zmdi-time"></i> '+sent_at+'</small></div></div>';
+        }
+
+        $(dom_element).insertBefore($('#group_channel_key_'+channel_key).find('.messages__reply'));
+
+        $("#message_content").val('');
+      }
+    }
+  });
+
+  initialize_functions = function() {
+    notify = function(message, type){
+      $.notify({
+        message: message
+      },{
+        type: type,
+        allow_dismiss: false,
+        label: 'Cancel',
+        className: 'btn-xs btn-default',
+        placement: {
+          from: 'bottom',
+          align: 'left'
+        },
+        delay: 2500,
+        animate: {
+          enter: 'animated fadeInUp',
+          exit: 'animated fadeOutDown'
+        },
+        offset: {
+          x: 30,
+          y: 30
+        }
+      });
+    }
+
+    profile = function(full_name, email){
+      notify(full_name + ", " + email, '-light');
+    }
+  }
+
+  initialize_functions();
+</script>

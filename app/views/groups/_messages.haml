@@ -1,0 +1,11 @@
+- messages.each do |message|
+  %div{:class => "list-group-item media #{message.sender.id.eql?(current_user.id) ? 'child_odd' : 'child_even'}"}
+    %div{:class => "#{message.sender.id.eql?(current_user.id) ? 'pull-right' : 'pull-left'}"}
+      %img.avatar-img{:alt => "'#{message.sender.full_name}, #{message.sender.email}'", :onclick => "profile('#{message.sender.full_name}', '#{message.sender.email}')", :src => "#{message.sender.profile_pic}"}/
+    .media-body
+      %div
+        .messages__item
+          = message.content.try(:html_safe)
+      %small.messages__date
+        %i.zmdi.zmdi-time
+        = message.created_at.strftime("%d/%m/%Y %H:%M")

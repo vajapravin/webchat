@@ -1,0 +1,14 @@
+!!!
+%html{:lang => "en"}
+  /[if IE 9 ] <html class="ie9">
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    %title Web Chat
+    = csrf_meta_tags
+    = stylesheet_link_tag    'login', media: 'all'
+  %body
+    = yield
+    = javascript_include_tag 'login'

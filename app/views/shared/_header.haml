@@ -1,0 +1,8 @@
+<!-- Header -->
+%header#header
+  .logo
+    %a{:href => "/"}
+      WebChat
+  - if session[:user]
+    .pull-right
+      = link_to "Logout", "/users/#{session[:user]['id']}", method: 'delete'
